@@ -1,0 +1,538 @@
+<!doctype html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="generator" content="Hugo 0.118.2">
+<meta name="robots" content="index, follow">
+
+
+<link rel="shortcut icon" href="/favicons/favicon.ico" >
+<link rel="apple-touch-icon" href="/favicons/apple-touch-icon-180x180.png" sizes="180x180">
+<link rel="icon" type="image/png" href="/favicons/favicon-16x16.png" sizes="16x16">
+<link rel="icon" type="image/png" href="/favicons/favicon-32x32.png" sizes="32x32">
+<link rel="icon" type="image/png" href="/favicons/android-36x36.png" sizes="36x36">
+<link rel="icon" type="image/png" href="/favicons/android-48x48.png" sizes="48x48">
+<link rel="icon" type="image/png" href="/favicons/android-72x72.png" sizes="72x72">
+<link rel="icon" type="image/png" href="/favicons/android-96x96.png" sizes="96x96">
+<link rel="icon" type="image/png" href="/favicons/android-144x144.png" sizes="144x144">
+<link rel="icon" type="image/png" href="/favicons/android-192x192.png" sizes="192x192">
+
+<title>FIND YOU WANT</title>
+<meta name="description" content="How to add new provider driver in rdma-core 1. Add new provider and build 1.1.rdma-core source tree rdma-core ├── buildlib ├── build.sh ├── ccan ├── CMakeLists.txt ├── COPYING.BSD_FB ├── COPYING.BSD_MIT ├── COPYING.GPL2 ├── COPYING.md ├── debian ├── Documentation ├── ibacm ├── infiniband-diags ├── iwpmd ├── kernel-boot ├── kernel-headers ├── libibmad ├── libibnetdisc ├── libibumad ├── libibverbs ├── librdmacm ├── MAINTAINERS ├── providers │ ├── bnxt_re │ ├── cxgb4 │ ├── efa │ ├── erdma │ ├── hfi1verbs │ ├── hns │ ├── ipathverbs │ ├── irdma │ ├── mana │ ├── mlx4 │ ├── mlx5 │ ├── mthca │ ├── ocrdma │ ├── qedr | ├── rib │ ├── rxe │ ├── siw │ └── vmw_pvrdma ├── pyverbs ├── rdma-ndd ├── README.">
+<meta property="og:title" content="" />
+<meta property="og:description" content="How to add new provider driver in rdma-core 1. Add new provider and build 1.1.rdma-core source tree rdma-core ├── buildlib ├── build.sh ├── ccan ├── CMakeLists.txt ├── COPYING.BSD_FB ├── COPYING.BSD_MIT ├── COPYING.GPL2 ├── COPYING.md ├── debian ├── Documentation ├── ibacm ├── infiniband-diags ├── iwpmd ├── kernel-boot ├── kernel-headers ├── libibmad ├── libibnetdisc ├── libibumad ├── libibverbs ├── librdmacm ├── MAINTAINERS ├── providers │ ├── bnxt_re │ ├── cxgb4 │ ├── efa │ ├── erdma │ ├── hfi1verbs │ ├── hns │ ├── ipathverbs │ ├── irdma │ ├── mana │ ├── mlx4 │ ├── mlx5 │ ├── mthca │ ├── ocrdma │ ├── qedr | ├── rib │ ├── rxe │ ├── siw │ └── vmw_pvrdma ├── pyverbs ├── rdma-ndd ├── README." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/how-to-add-new-provider-driver-in-rdma-core/" /><meta property="article:section" content="post" />
+
+
+<meta itemprop="name" content="">
+<meta itemprop="description" content="How to add new provider driver in rdma-core 1. Add new provider and build 1.1.rdma-core source tree rdma-core ├── buildlib ├── build.sh ├── ccan ├── CMakeLists.txt ├── COPYING.BSD_FB ├── COPYING.BSD_MIT ├── COPYING.GPL2 ├── COPYING.md ├── debian ├── Documentation ├── ibacm ├── infiniband-diags ├── iwpmd ├── kernel-boot ├── kernel-headers ├── libibmad ├── libibnetdisc ├── libibumad ├── libibverbs ├── librdmacm ├── MAINTAINERS ├── providers │ ├── bnxt_re │ ├── cxgb4 │ ├── efa │ ├── erdma │ ├── hfi1verbs │ ├── hns │ ├── ipathverbs │ ├── irdma │ ├── mana │ ├── mlx4 │ ├── mlx5 │ ├── mthca │ ├── ocrdma │ ├── qedr | ├── rib │ ├── rxe │ ├── siw │ └── vmw_pvrdma ├── pyverbs ├── rdma-ndd ├── README.">
+
+<meta itemprop="wordCount" content="1347">
+<meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content=""/>
+<meta name="twitter:description" content="How to add new provider driver in rdma-core 1. Add new provider and build 1.1.rdma-core source tree rdma-core ├── buildlib ├── build.sh ├── ccan ├── CMakeLists.txt ├── COPYING.BSD_FB ├── COPYING.BSD_MIT ├── COPYING.GPL2 ├── COPYING.md ├── debian ├── Documentation ├── ibacm ├── infiniband-diags ├── iwpmd ├── kernel-boot ├── kernel-headers ├── libibmad ├── libibnetdisc ├── libibumad ├── libibverbs ├── librdmacm ├── MAINTAINERS ├── providers │ ├── bnxt_re │ ├── cxgb4 │ ├── efa │ ├── erdma │ ├── hfi1verbs │ ├── hns │ ├── ipathverbs │ ├── irdma │ ├── mana │ ├── mlx4 │ ├── mlx5 │ ├── mthca │ ├── ocrdma │ ├── qedr | ├── rib │ ├── rxe │ ├── siw │ └── vmw_pvrdma ├── pyverbs ├── rdma-ndd ├── README."/>
+
+
+
+
+<link rel="preload" href="/scss/main.min.8b5cb6bf325858503123a884cabb18b474576e49a8f8b45c16440e12cb52ad15.css" as="style">
+<link href="/scss/main.min.8b5cb6bf325858503123a884cabb18b474576e49a8f8b45c16440e12cb52ad15.css" rel="stylesheet" integrity="">
+
+<script
+  src="https://code.jquery.com/jquery-3.6.3.min.js"
+  integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ=="
+  crossorigin="anonymous"></script>
+
+  </head>
+  <body class="td-page">
+    <header>
+      <nav class="td-navbar navbar-dark js-navbar-scroll">
+<div class="container-fluid flex-column flex-md-row">
+  <a class="navbar-brand" href="/"><span class="navbar-brand__logo navbar-logo"><svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 500 500" style="enable-background:new 0 0 500 500"><g><path style="fill:#fff" d="M116.8525 421.9722c-5.7041.0-10.3442-4.3127-10.3442-9.6129V88.183c0-5.3002 4.6401-9.6117 10.3442-9.6117H320.858c3.0347.0 9.3959.5498 11.7506 2.6302l.3545.3442 58.905 63.2912c2.3101 2.491 2.9202 8.4928 2.9202 11.3184v256.2039c0 5.3002-4.6407 9.6129-10.3436 9.6129H116.8525z"/><g><g><g><path style="fill:#767676" d="M384.4445 423.2066H116.852c-6.3839.0-11.5786-4.8658-11.5786-10.8474V88.1831c0-5.9804 5.1947-10.8461 11.5786-10.8461h204.0062c.377.0 9.2786.0329 12.568 2.9389l.3947.3833 58.9508 63.337c3.2135 3.4652 3.2514 11.7924 3.2514 12.1593v256.2036C396.0231 418.3408 390.8284 423.2066 384.4445 423.2066zM116.5079 411.9189c.0848.0278.1999.0531.3441.0531h267.5925c.1442.0.2581-.0253.3441-.0531V156.1556c-.0076-.9033-.3593-3.7347-.7034-5.0037l-57.6527-61.9416c-1.4651-.3176-4.4533-.6389-5.5742-.6389H116.852c-.143.0-.2594.024-.3441.0531V411.9189zm267.4533-261.149zM327.0321 89.371v.0013V89.371z"/></g></g></g><g><g><path style="fill:#5b7fc0" d="M189.0874 210.1754l.0012-.0012c7.7751.0012 15.0295 4.1862 18.932 10.9234 1.9177 3.3159 2.9305 7.1011 2.9293 10.9378.0 5.8394-2.2733 11.3304-6.4032 15.4604-4.1288 4.1288-9.6186 6.4032-15.458 6.4032s-11.328-2.2733-15.458-6.4032-6.4032-9.6186-6.4056-15.4628c.0012-6.025 2.454-11.4897 6.4116-15.4473C177.5953 212.627 183.0601 210.1742 189.0874 210.1754zm7.993 21.8576c.0012-1.4042-.3687-2.7868-1.063-3.9887-1.4293-2.4684-4.0833-3.9995-6.9299-4.0019-4.4077.0024-7.993 3.5877-7.993 7.993.0 2.1356.832 4.1431 2.3427 5.6539 1.5083 1.5083 3.5159 2.3403 5.6503 2.3415 2.1356.0 4.1443-.8308 5.6539-2.3403S197.0816 234.1722 197.0804 232.033z"/><path style="opacity:.3;fill:#fff" d="M189.0898 210.176c7.7763.0 15.0283 4.1826 18.926 10.9151 1.9201 3.3136 2.9377 7.0988 2.9353 10.9462.0024 12.0643-9.8065 21.8636-21.8613 21.8613-12.0547.0024-21.8636-9.8066-21.8612-21.8613.0-6.0285 2.4516-11.4921 6.4116-15.452C177.5977 212.6276 183.0612 210.176 189.0898 210.176zm7.9941 21.8612c0-1.4078-.3711-2.7892-1.0702-3.9959-1.4269-2.466-4.0797-3.9983-6.924-3.9983-4.4005-.0048-7.9918 3.5817-7.9942 7.9942.0024 4.4077 3.5865 7.9918 7.9942 7.9942 2.2027.0 4.2018-.8978 5.6479-2.3439C196.1861 236.239 197.0839 234.2399 197.0839 232.0372z"/><g><defs><path id="SVGID_1_" d="M194.7376 237.6875c-1.4461 1.4461-3.4452 2.3439-5.6479 2.3439-4.4077-.0024-7.9918-3.5865-7.9942-7.9942.0024-4.4125 3.5937-7.999 7.9942-7.9942 2.8443.0 5.497 1.5323 6.924 3.9983.6991 1.2067 1.0702 2.5881 1.0702 3.9959C197.0839 234.2399 196.1861 236.239 194.7376 237.6875z"/></defs><clipPath id="SVGID_2_"><use xlink:href="#SVGID_1_" style="overflow:visible"/></clipPath><path style="clip-path:url(#SVGID_2_);fill:#fff" d="M190.0704 225.0237c-4.4005-.0048-7.9918 3.5817-7.9942 7.9942.0011 1.9546.7088 3.7452 1.8782 5.1354-1.7447-1.4674-2.8575-3.663-2.8588-6.116.0024-4.4125 3.5936-7.999 7.9942-7.9942 2.3802-1e-4 4.616 1.0833 6.1218 2.8788C193.7885 225.7247 191.9774 225.0237 190.0704 225.0237z"/><path style="opacity:.13;clip-path:url(#SVGID_2_);fill:#020202" d="M190.0704 225.0237c-4.4005-.0048-7.9918 3.5817-7.9942 7.9942.0011 1.9546.7088 3.7452 1.8782 5.1354-1.7447-1.4674-2.8575-3.663-2.8588-6.116.0024-4.4125 3.5936-7.999 7.9942-7.9942 2.3802-1e-4 4.616 1.0833 6.1218 2.8788C193.7885 225.7247 191.9774 225.0237 190.0704 225.0237z"/></g><g><defs><path id="SVGID_3_" d="M189.0898 210.176c7.7763.0 15.0283 4.1826 18.926 10.9151 1.9201 3.3136 2.9377 7.0988 2.9353 10.9462.0024 12.0643-9.8065 21.8636-21.8613 21.8613-12.0547.0024-21.8636-9.8066-21.8612-21.8613.0-6.0285 2.4516-11.4921 6.4116-15.452C177.5977 212.6276 183.0612 210.176 189.0898 210.176zm7.9941 21.8612c0-1.4078-.3711-2.7892-1.0702-3.9959-1.4269-2.466-4.0797-3.9983-6.924-3.9983-4.4005-.0048-7.9918 3.5817-7.9942 7.9942.0024 4.4077 3.5865 7.9918 7.9942 7.9942 2.2027.0 4.2018-.8978 5.6479-2.3439C196.1861 236.239 197.0839 234.2399 197.0839 232.0372z"/></defs><clipPath id="SVGID_4_"><use xlink:href="#SVGID_3_" style="overflow:visible"/></clipPath><path style="clip-path:url(#SVGID_4_);fill:#5b7fc0" d="M172.6595 215.6045c-3.96 3.96-6.4116 9.4235-6.4116 15.452-.0024 12.0547 9.8066 21.8636 21.8613 21.8612 12.0547.0024 21.8636-9.797 21.8613-21.8612.0024-3.8475-1.0151-7.6326-2.9353-10.9462-3.8977-6.7324-11.1497-10.9151-18.926-10.9151C182.0806 209.1953 176.6171 211.647 172.6595 215.6045z"/></g></g><rect x="198.8952" y="225.1043" style="fill:#5b7fc0" width="122.6266" height="13.8671"/></g><g><path style="fill:#d95140" d="M189.0874 155.7611l.0012-.0012c7.7751.0012 15.0295 4.1862 18.932 10.9234 1.9177 3.3159 2.9305 7.1011 2.9293 10.9378.0 5.8394-2.2733 11.3304-6.4032 15.4604-4.1288 4.1288-9.6186 6.4032-15.458 6.4032s-11.328-2.2733-15.458-6.4032-6.4032-9.6186-6.4056-15.4628c.0012-6.0249 2.454-11.4897 6.4116-15.4473C177.5953 158.2128 183.0601 155.7599 189.0874 155.7611zm7.993 21.8577c.0012-1.4042-.3687-2.7868-1.063-3.9887-1.4293-2.4684-4.0833-3.9995-6.9299-4.0019-4.4077.0024-7.993 3.5877-7.993 7.993.0 2.1356.832 4.1431 2.3427 5.6539 1.5083 1.5083 3.5159 2.3403 5.6503 2.3415 2.1356.0 4.1443-.8308 5.6539-2.3403C196.2508 181.7667 197.0816 179.758 197.0804 177.6188z"/><path style="opacity:.3;fill:#fff" d="M189.0898 155.7617c7.7763.0 15.0283 4.1826 18.926 10.9151 1.9201 3.3135 2.9377 7.0987 2.9353 10.9462.0024 12.0643-9.8065 21.8636-21.8613 21.8613-12.0547.0024-21.8636-9.8066-21.8612-21.8613.0-6.0285 2.4516-11.4921 6.4116-15.452C177.5977 158.2134 183.0612 155.7617 189.0898 155.7617zm7.9941 21.8613c0-1.4078-.3711-2.7892-1.0702-3.9959-1.4269-2.466-4.0797-3.9983-6.924-3.9983-4.4005-.0048-7.9918 3.5817-7.9942 7.9942.0024 4.4077 3.5865 7.9918 7.9942 7.9942 2.2027.0 4.2018-.8978 5.6479-2.3439C196.1861 181.8248 197.0839 179.8256 197.0839 177.623z"/><g><defs><path id="SVGID_5_" d="M194.7376 183.2733c-1.4461 1.4461-3.4452 2.3439-5.6479 2.3439-4.4077-.0024-7.9918-3.5865-7.9942-7.9942.0024-4.4125 3.5937-7.9989 7.9942-7.9942 2.8443.0 5.497 1.5323 6.924 3.9983.6991 1.2067 1.0702 2.5881 1.0702 3.9959C197.0839 179.8256 196.1861 181.8248 194.7376 183.2733z"/></defs><clipPath id="SVGID_6_"><use xlink:href="#SVGID_5_" style="overflow:visible"/></clipPath><path style="clip-path:url(#SVGID_6_);fill:#fff" d="M190.0704 170.6095c-4.4005-.0048-7.9918 3.5817-7.9942 7.9942.0011 1.9546.7088 3.7452 1.8782 5.1354-1.7447-1.4674-2.8575-3.663-2.8588-6.116.0024-4.4125 3.5936-7.999 7.9942-7.9942 2.3802-1e-4 4.616 1.0833 6.1218 2.8788C193.7885 171.3104 191.9774 170.6095 190.0704 170.6095z"/><path style="opacity:.13;clip-path:url(#SVGID_6_);fill:#020202" d="M190.0704 170.6095c-4.4005-.0048-7.9918 3.5817-7.9942 7.9942.0011 1.9546.7088 3.7452 1.8782 5.1354-1.7447-1.4674-2.8575-3.663-2.8588-6.116.0024-4.4125 3.5936-7.999 7.9942-7.9942 2.3802-1e-4 4.616 1.0833 6.1218 2.8788C193.7885 171.3104 191.9774 170.6095 190.0704 170.6095z"/></g><g><defs><path id="SVGID_7_" d="M189.0898 155.7617c7.7763.0 15.0283 4.1826 18.926 10.9151 1.9201 3.3135 2.9377 7.0987 2.9353 10.9462.0024 12.0643-9.8065 21.8636-21.8613 21.8613-12.0547.0024-21.8636-9.8066-21.8612-21.8613.0-6.0285 2.4516-11.4921 6.4116-15.452C177.5977 158.2134 183.0612 155.7617 189.0898 155.7617zm7.9941 21.8613c0-1.4078-.3711-2.7892-1.0702-3.9959-1.4269-2.466-4.0797-3.9983-6.924-3.9983-4.4005-.0048-7.9918 3.5817-7.9942 7.9942.0024 4.4077 3.5865 7.9918 7.9942 7.9942 2.2027.0 4.2018-.8978 5.6479-2.3439C196.1861 181.8248 197.0839 179.8256 197.0839 177.623z"/></defs><clipPath id="SVGID_8_"><use xlink:href="#SVGID_7_" style="overflow:visible"/></clipPath><path style="clip-path:url(#SVGID_8_);fill:#d95140" d="M172.6595 161.1903c-3.96 3.96-6.4116 9.4235-6.4116 15.452-.0024 12.0547 9.8066 21.8636 21.8613 21.8613 12.0547.0024 21.8636-9.797 21.8613-21.8613.0024-3.8474-1.0151-7.6326-2.9353-10.9462-3.8977-6.7324-11.1497-10.9151-18.926-10.9151C182.0806 154.7811 176.6171 157.2327 172.6595 161.1903z"/></g><rect x="198.8952" y="170.69" style="fill:#d95140" width="122.6266" height="13.8671"/></g><g><g><path style="fill:#56a55c" d="M189.5379 264.6147l.0012-.0012c7.7751.0012 15.0294 4.1862 18.932 10.9235 1.9177 3.3159 2.9305 7.1011 2.9293 10.9378.0 5.8394-2.2733 11.3304-6.4032 15.4604-4.1288 4.1288-9.6186 6.4032-15.458 6.4032-5.8394.0-11.3281-2.2733-15.458-6.4032-4.13-4.13-6.4032-9.6186-6.4056-15.4628.0012-6.0249 2.454-11.4897 6.4116-15.4472C178.0458 267.0663 183.5105 264.6135 189.5379 264.6147zm7.993 21.8576c.0012-1.4042-.3687-2.7868-1.063-3.9887-1.4293-2.4684-4.0833-3.9995-6.9299-4.0019-4.4077.0024-7.993 3.5877-7.993 7.993.0 2.1356.832 4.1431 2.3427 5.6538 1.5083 1.5083 3.5159 2.3403 5.6503 2.3415 2.1356.0 4.1443-.8308 5.6539-2.3403C196.7013 290.6202 197.5321 288.6115 197.5309 286.4723z"/><path style="opacity:.3;fill:#fff" d="M189.5403 264.6153c7.7763.0 15.0283 4.1826 18.926 10.9151 1.9201 3.3135 2.9377 7.0987 2.9353 10.9462.0024 12.0643-9.8065 21.8636-21.8613 21.8613-12.0547.0024-21.8636-9.8065-21.8612-21.8613.0-6.0285 2.4516-11.492 6.4116-15.452C178.0482 267.0669 183.5117 264.6153 189.5403 264.6153zm7.9941 21.8612c0-1.4078-.3711-2.7892-1.0702-3.9959-1.4269-2.466-4.0797-3.9983-6.924-3.9983-4.4005-.0048-7.9918 3.5817-7.9942 7.9941.0024 4.4077 3.5865 7.9918 7.9942 7.9942 2.2027.0 4.2018-.8978 5.6479-2.3439C196.6366 290.6783 197.5344 288.6792 197.5344 286.4765z"/><g><defs><path id="SVGID_9_" d="M195.1881 292.1268c-1.4461 1.4461-3.4452 2.3439-5.6479 2.3439-4.4077-.0024-7.9918-3.5865-7.9942-7.9942.0024-4.4125 3.5937-7.9989 7.9942-7.9941 2.8443.0 5.497 1.5323 6.924 3.9983.6991 1.2067 1.0702 2.5881 1.0702 3.9959C197.5344 288.6792 196.6366 290.6783 195.1881 292.1268z"/></defs><clipPath id="SVGID_10_"><use xlink:href="#SVGID_9_" style="overflow:visible"/></clipPath><path style="clip-path:url(#SVGID_10_);fill:#fff" d="M190.5209 279.463c-4.4005-.0048-7.9918 3.5817-7.9942 7.9941.0011 1.9547.7088 3.7452 1.8782 5.1354-1.7446-1.4674-2.8575-3.6631-2.8588-6.1161.0024-4.4125 3.5936-7.999 7.9942-7.9941 2.3802-1e-4 4.616 1.0833 6.1218 2.8788C194.239 280.164 192.4279 279.463 190.5209 279.463z"/><path style="opacity:.13;clip-path:url(#SVGID_10_);fill:#020202" d="M190.5209 279.463c-4.4005-.0048-7.9918 3.5817-7.9942 7.9941.0011 1.9547.7088 3.7452 1.8782 5.1354-1.7446-1.4674-2.8575-3.6631-2.8588-6.1161.0024-4.4125 3.5936-7.999 7.9942-7.9941 2.3802-1e-4 4.616 1.0833 6.1218 2.8788C194.239 280.164 192.4279 279.463 190.5209 279.463z"/></g><g><defs><path id="SVGID_11_" d="M189.5403 264.6153c7.7763.0 15.0283 4.1826 18.926 10.9151 1.9201 3.3135 2.9377 7.0987 2.9353 10.9462.0024 12.0643-9.8065 21.8636-21.8613 21.8613-12.0547.0024-21.8636-9.8065-21.8612-21.8613.0-6.0285 2.4516-11.492 6.4116-15.452C178.0482 267.0669 183.5117 264.6153 189.5403 264.6153zm7.9941 21.8612c0-1.4078-.3711-2.7892-1.0702-3.9959-1.4269-2.466-4.0797-3.9983-6.924-3.9983-4.4005-.0048-7.9918 3.5817-7.9942 7.9941.0024 4.4077 3.5865 7.9918 7.9942 7.9942 2.2027.0 4.2018-.8978 5.6479-2.3439C196.6366 290.6783 197.5344 288.6792 197.5344 286.4765z"/></defs><clipPath id="SVGID_12_"><use xlink:href="#SVGID_11_" style="overflow:visible"/></clipPath><path style="clip-path:url(#SVGID_12_);fill:#56a55c" d="M173.11 270.0439c-3.96 3.96-6.4116 9.4235-6.4116 15.452-.0024 12.0547 9.8066 21.8636 21.8613 21.8613 12.0547.0024 21.8636-9.797 21.8613-21.8613.0024-3.8474-1.0151-7.6326-2.9353-10.9462-3.8977-6.7325-11.1497-10.9151-18.926-10.9151C182.5311 263.6346 177.0676 266.0863 173.11 270.0439z"/></g></g><rect x="199.3456" y="279.5436" style="fill:#56a55c" width="122.6266" height="13.8671"/></g><g><g><path style="fill:#f1bc42" d="M189.0874 318.7208l.0012-.0012c7.7751.0012 15.0295 4.1862 18.932 10.9234 1.9177 3.3159 2.9305 7.1011 2.9293 10.9378.0 5.8394-2.2733 11.3305-6.4032 15.4604-4.1288 4.1288-9.6186 6.4032-15.458 6.4032s-11.328-2.2733-15.458-6.4032-6.4032-9.6186-6.4056-15.4628c.0012-6.025 2.454-11.4897 6.4116-15.4472C177.5953 321.1724 183.0601 318.7196 189.0874 318.7208zm7.993 21.8576c.0012-1.4042-.3687-2.7868-1.063-3.9887-1.4293-2.4684-4.0833-3.9995-6.9299-4.0019-4.4077.0024-7.993 3.5877-7.993 7.993.0 2.1356.832 4.1431 2.3427 5.6539 1.5083 1.5083 3.5159 2.3403 5.6503 2.3415 2.1356.0 4.1443-.8308 5.6539-2.3403S197.0816 342.7176 197.0804 340.5784z"/><path style="opacity:.3;fill:#fff" d="M189.0898 318.7214c7.7763.0 15.0283 4.1826 18.926 10.915 1.9201 3.3136 2.9377 7.0988 2.9353 10.9462.0024 12.0643-9.8065 21.8636-21.8613 21.8612-12.0547.0024-21.8636-9.8065-21.8612-21.8612.0-6.0285 2.4516-11.4921 6.4116-15.452C177.5977 321.173 183.0612 318.7214 189.0898 318.7214zm7.9941 21.8612c0-1.4078-.3711-2.7892-1.0702-3.9959-1.4269-2.466-4.0797-3.9983-6.924-3.9983-4.4005-.0048-7.9918 3.5817-7.9942 7.9942.0024 4.4077 3.5865 7.9918 7.9942 7.9942 2.2027.0 4.2018-.8978 5.6479-2.3439C196.1861 344.7844 197.0839 342.7853 197.0839 340.5826z"/><g><defs><path id="SVGID_13_" d="M194.7376 346.2329c-1.4461 1.4461-3.4452 2.3439-5.6479 2.3439-4.4077-.0024-7.9918-3.5865-7.9942-7.9942.0024-4.4125 3.5937-7.999 7.9942-7.9942 2.8443.0 5.497 1.5323 6.924 3.9983.6991 1.2067 1.0702 2.5881 1.0702 3.9959C197.0839 342.7853 196.1861 344.7844 194.7376 346.2329z"/></defs><clipPath id="SVGID_14_"><use xlink:href="#SVGID_13_" style="overflow:visible"/></clipPath><path style="clip-path:url(#SVGID_14_);fill:#fff" d="M190.0704 333.5691c-4.4005-.0048-7.9918 3.5817-7.9942 7.9942.0011 1.9547.7088 3.7452 1.8782 5.1354-1.7447-1.4674-2.8575-3.6631-2.8588-6.1161.0024-4.4125 3.5936-7.999 7.9942-7.9942 2.3802-1e-4 4.616 1.0834 6.1218 2.8788C193.7885 334.2701 191.9774 333.5691 190.0704 333.5691z"/><path style="opacity:.13;clip-path:url(#SVGID_14_);fill:#020202" d="M190.0704 333.5691c-4.4005-.0048-7.9918 3.5817-7.9942 7.9942.0011 1.9547.7088 3.7452 1.8782 5.1354-1.7447-1.4674-2.8575-3.6631-2.8588-6.1161.0024-4.4125 3.5936-7.999 7.9942-7.9942 2.3802-1e-4 4.616 1.0834 6.1218 2.8788C193.7885 334.2701 191.9774 333.5691 190.0704 333.5691z"/></g><g><defs><path id="SVGID_15_" d="M189.0898 318.7214c7.7763.0 15.0283 4.1826 18.926 10.915 1.9201 3.3136 2.9377 7.0988 2.9353 10.9462.0024 12.0643-9.8065 21.8636-21.8613 21.8612-12.0547.0024-21.8636-9.8065-21.8612-21.8612.0-6.0285 2.4516-11.4921 6.4116-15.452C177.5977 321.173 183.0612 318.7214 189.0898 318.7214zm7.9941 21.8612c0-1.4078-.3711-2.7892-1.0702-3.9959-1.4269-2.466-4.0797-3.9983-6.924-3.9983-4.4005-.0048-7.9918 3.5817-7.9942 7.9942.0024 4.4077 3.5865 7.9918 7.9942 7.9942 2.2027.0 4.2018-.8978 5.6479-2.3439C196.1861 344.7844 197.0839 342.7853 197.0839 340.5826z"/></defs><clipPath id="SVGID_16_"><use xlink:href="#SVGID_15_" style="overflow:visible"/></clipPath><path style="clip-path:url(#SVGID_16_);fill:#f1bc42" d="M172.6595 324.15c-3.96 3.96-6.4116 9.4235-6.4116 15.452-.0024 12.0547 9.8066 21.8636 21.8613 21.8612 12.0547.0024 21.8636-9.797 21.8613-21.8612.0024-3.8474-1.0151-7.6327-2.9353-10.9462-3.8977-6.7324-11.1497-10.9151-18.926-10.9151C182.0806 317.7407 176.6171 320.1924 172.6595 324.15z"/></g></g><rect x="198.8952" y="333.6497" style="fill:#f1bc42" width="122.6266" height="13.8671"/></g></g></svg></span><span class="navbar-brand__name">FIND YOU WANT</span></a>
+  <div class="td-navbar-nav-scroll ms-md-auto" id="main_navbar">
+    <ul class="navbar-nav">
+      </ul>
+  </div>
+  <div class="d-none d-lg-block">
+    
+  </div>
+</div>
+</nav>
+    </header>
+    <div class="container-fluid td-default td-outer">
+      <main role="main" class="td-main">
+        <h1 id="how-to-add-new-provider-driver-in-rdma-core">How to add new provider driver in rdma-core</h1>
+<h2 id="1-add-new-provider-and-build">1. Add new provider and build</h2>
+<h3 id="11rdma-core-source-tree">1.1.rdma-core source tree</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>rdma-core
+</span></span><span style="display:flex;"><span>├── buildlib
+</span></span><span style="display:flex;"><span>├── build.sh
+</span></span><span style="display:flex;"><span>├── ccan
+</span></span><span style="display:flex;"><span>├── CMakeLists.txt
+</span></span><span style="display:flex;"><span>├── COPYING.BSD_FB
+</span></span><span style="display:flex;"><span>├── COPYING.BSD_MIT
+</span></span><span style="display:flex;"><span>├── COPYING.GPL2
+</span></span><span style="display:flex;"><span>├── COPYING.md
+</span></span><span style="display:flex;"><span>├── debian
+</span></span><span style="display:flex;"><span>├── Documentation
+</span></span><span style="display:flex;"><span>├── ibacm
+</span></span><span style="display:flex;"><span>├── infiniband-diags
+</span></span><span style="display:flex;"><span>├── iwpmd
+</span></span><span style="display:flex;"><span>├── kernel-boot
+</span></span><span style="display:flex;"><span>├── kernel-headers
+</span></span><span style="display:flex;"><span>├── libibmad
+</span></span><span style="display:flex;"><span>├── libibnetdisc
+</span></span><span style="display:flex;"><span>├── libibumad
+</span></span><span style="display:flex;"><span>├── libibverbs
+</span></span><span style="display:flex;"><span>├── librdmacm
+</span></span><span style="display:flex;"><span>├── MAINTAINERS
+</span></span><span style="display:flex;"><span>├── providers
+</span></span><span style="display:flex;"><span>│   ├── bnxt_re
+</span></span><span style="display:flex;"><span>│   ├── cxgb4
+</span></span><span style="display:flex;"><span>│   ├── efa
+</span></span><span style="display:flex;"><span>│   ├── erdma
+</span></span><span style="display:flex;"><span>│   ├── hfi1verbs
+</span></span><span style="display:flex;"><span>│   ├── hns
+</span></span><span style="display:flex;"><span>│   ├── ipathverbs
+</span></span><span style="display:flex;"><span>│   ├── irdma
+</span></span><span style="display:flex;"><span>│   ├── mana
+</span></span><span style="display:flex;"><span>│   ├── mlx4
+</span></span><span style="display:flex;"><span>│   ├── mlx5
+</span></span><span style="display:flex;"><span>│   ├── mthca
+</span></span><span style="display:flex;"><span>│   ├── ocrdma
+</span></span><span style="display:flex;"><span>│   ├── qedr
+</span></span><span style="display:flex;"><span>|   ├── rib
+</span></span><span style="display:flex;"><span>│   ├── rxe
+</span></span><span style="display:flex;"><span>│   ├── siw
+</span></span><span style="display:flex;"><span>│   └── vmw_pvrdma
+</span></span><span style="display:flex;"><span>├── pyverbs
+</span></span><span style="display:flex;"><span>├── rdma-ndd
+</span></span><span style="display:flex;"><span>├── README.md
+</span></span><span style="display:flex;"><span>├── redhat
+</span></span><span style="display:flex;"><span>├── srp_daemon
+</span></span><span style="display:flex;"><span>├── suse
+</span></span><span style="display:flex;"><span>├── tests
+</span></span><span style="display:flex;"><span>└── util
+</span></span></code></pre></div><ul>
+<li>
+<p>其中providers是各个厂商的用户态驱动</p>
+<ul>
+<li><strong><code>rib</code>是resnics的用户态驱动,把驱动代码拷贝到<code>providers</code>下</strong></li>
+</ul>
+</li>
+<li>
+<p><strong>头文件<code>rib-abi.h</code>需要拷贝到<code>kernel-headers/rdma/</code>下</strong></p>
+</li>
+<li>
+<p><strong>kernel-headers/rdma/ib_user_ioctl_verbs.h中</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-diff" data-lang="diff"><span style="display:flex;"><span><span style="color:#75715e">@@ -254,6 +254,7 @@ enum rdma_driver_id {
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        RDMA_DRIVER_SIW,
+</span></span><span style="display:flex;"><span>        RDMA_DRIVER_ERDMA,
+</span></span><span style="display:flex;"><span>        RDMA_DRIVER_MANA,
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">+       RDMA_DRIVER_RIB,
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e"></span> };
+</span></span></code></pre></div></li>
+<li>
+<p><strong>kernel-headers/CMakeLists.txt</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-diff" data-lang="diff"><span style="display:flex;"><span><span style="color:#75715e">@@ -26,6 +26,7 @@ publish_internal_headers(rdma
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>   rdma/rvt-abi.h
+</span></span><span style="display:flex;"><span>   rdma/siw-abi.h
+</span></span><span style="display:flex;"><span>   rdma/vmw_pvrdma-abi.h
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">+  rdma/rib-abi.h
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e"></span>   )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> publish_internal_headers(rdma/hfi
+</span></span><span style="display:flex;"><span><span style="color:#75715e">@@ -80,6 +81,7 @@ rdma_kernel_provider_abi(
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>   rdma/rdma_user_rxe.h
+</span></span><span style="display:flex;"><span>   rdma/siw-abi.h
+</span></span><span style="display:flex;"><span>   rdma/vmw_pvrdma-abi.h
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">+  rdma/rib-abi.h
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e"></span>   )
+</span></span></code></pre></div></li>
+<li>
+<p><strong>CMakeLists.txt中添加rib子目录</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-diff" data-lang="diff"><span style="display:flex;"><span><span style="color:#75715e">@@ -733,6 +733,7 @@ add_subdirectory(providers/mthca)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span> add_subdirectory(providers/ocrdma)
+</span></span><span style="display:flex;"><span> add_subdirectory(providers/qedr)
+</span></span><span style="display:flex;"><span> add_subdirectory(providers/vmw_pvrdma)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">+add_subdirectory(providers/rib)
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e"></span> endif()
+</span></span></code></pre></div></li>
+</ul>
+<h3 id="12build">1.2.build</h3>
+<ol>
+<li>按照<code>README.md</code>中的指导安装依赖包</li>
+<li>执行<code>bash build.sh</code>进行编译即可</li>
+</ol>
+<h3 id="13patch制作后续rpm包制作时需要">1.3.patch制作(后续rpm包制作时需要)</h3>
+<ol>
+<li>
+<p>查看commit id, 然后记下commit id 前8位或者全部</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>git log -n <span style="color:#ae81ff">1</span>
+</span></span></code></pre></div></li>
+<li>
+<p>提交当前修改</p>
+</li>
+</ol>
+<h2 id="rdma-core-rib-rpm包制作">rdma-core rib rpm包制作</h2>
+<h3 id="libibverbsrpm-librdmacmrpm-rdma-corerpm-rdma-core-develrpm包结构和文件分析">libibverbs.rpm librdmacm.rpm rdma-core.rpm rdma-core-devel.rpm包结构和文件分析</h3>
+<ul>
+<li>这些rpm包都是公版发行包</li>
+<li>rdma-core-devel是用于rdma用户态APP开发的</li>
+<li>还有未列出的**<code>libibverbs-utils.rpm</code><strong>和</strong><code>librdmacm-utils.rpm</code>**这两个包，里面是关于rdma的一些工具和示例可执行程序</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>.
+</span></span><span style="display:flex;"><span>├── libibverbs
+</span></span><span style="display:flex;"><span>│ ├── etc
+</span></span><span style="display:flex;"><span>│ │ └── libibverbs.d
+</span></span><span style="display:flex;"><span>│ │     ├── bnxt_re.driver
+</span></span><span style="display:flex;"><span>│ │     ├── cxgb4.driver
+</span></span><span style="display:flex;"><span>│ │     ├── efa.driver
+</span></span><span style="display:flex;"><span>│ │     ├── hfi1verbs.driver
+</span></span><span style="display:flex;"><span>│ │     ├── hns.driver
+</span></span><span style="display:flex;"><span>│ │     ├── i40iw.driver
+</span></span><span style="display:flex;"><span>│ │     ├── mlx4.driver
+</span></span><span style="display:flex;"><span>│ │     ├── mlx5.driver
+</span></span><span style="display:flex;"><span>│ │     ├── qedr.driver
+</span></span><span style="display:flex;"><span>│ │     ├── rxe.driver
+</span></span><span style="display:flex;"><span>│ │     ├── siw.driver
+</span></span><span style="display:flex;"><span>│ │     └── vmw_pvrdma.driver
+</span></span><span style="display:flex;"><span>│ └── usr
+</span></span><span style="display:flex;"><span>│     ├── lib
+</span></span><span style="display:flex;"><span>│     ├── lib64
+</span></span><span style="display:flex;"><span>│     │ ├── libefa.so.1 -&gt; libefa.so.1.1.32.0
+</span></span><span style="display:flex;"><span>│     │ ├── libefa.so.1.1.32.0
+</span></span><span style="display:flex;"><span>│     │ ├── libibverbs
+</span></span><span style="display:flex;"><span>│     │ │ ├── libbnxt_re-rdmav25.so
+</span></span><span style="display:flex;"><span>│     │ │ ├── libcxgb4-rdmav25.so
+</span></span><span style="display:flex;"><span>│     │ │ ├── libefa-rdmav25.so -&gt; ../libefa.so.1.1.32.0
+</span></span><span style="display:flex;"><span>│     │ │ ├── libhfi1verbs-rdmav25.so
+</span></span><span style="display:flex;"><span>│     │ │ ├── libhns-rdmav25.so
+</span></span><span style="display:flex;"><span>│     │ │ ├── libi40iw-rdmav25.so
+</span></span><span style="display:flex;"><span>│     │ │ ├── libmlx4-rdmav25.so -&gt; ../libmlx4.so.1.0.32.0
+</span></span><span style="display:flex;"><span>│     │ │ ├── libmlx5-rdmav25.so -&gt; ../libmlx5.so.1.16.32.0
+</span></span><span style="display:flex;"><span>│     │ │ ├── libqedr-rdmav25.so
+</span></span><span style="display:flex;"><span>│     │ │ ├── librxe-rdmav25.so
+</span></span><span style="display:flex;"><span>│     │ │ ├── libsiw-rdmav25.so
+</span></span><span style="display:flex;"><span>│     │ │ └── libvmw_pvrdma-rdmav25.so
+</span></span><span style="display:flex;"><span>│     │ ├── libibverbs.so.1 -&gt; libibverbs.so.1.11.32.0
+</span></span><span style="display:flex;"><span>│     │ ├── libibverbs.so.1.11.32.0
+</span></span><span style="display:flex;"><span>│     │ ├── libmlx4.so.1 -&gt; libmlx4.so.1.0.32.0
+</span></span><span style="display:flex;"><span>│     │ ├── libmlx4.so.1.0.32.0
+</span></span><span style="display:flex;"><span>│     │ ├── libmlx5.so.1 -&gt; libmlx5.so.1.16.32.0
+</span></span><span style="display:flex;"><span>│     │ └── libmlx5.so.1.16.32.0
+</span></span><span style="display:flex;"><span>│     └── share
+</span></span><span style="display:flex;"><span>│         ├── doc
+</span></span><span style="display:flex;"><span>│         │ └── rdma-core
+</span></span><span style="display:flex;"><span>│         │     ├── libibverbs.md
+</span></span><span style="display:flex;"><span>│         │     ├── rxe.md
+</span></span><span style="display:flex;"><span>│         │     └── tag_matching.md
+</span></span><span style="display:flex;"><span>│         └── man
+</span></span><span style="display:flex;"><span>│             └── man7
+</span></span><span style="display:flex;"><span>│                 ├── mlx4dv.7.gz
+</span></span><span style="display:flex;"><span>│                 ├── mlx5dv.7.gz
+</span></span><span style="display:flex;"><span>│                 └── rxe.7.gz
+</span></span><span style="display:flex;"><span>├── libibverbs-32.0-4.el8.x86_64.rpm
+</span></span><span style="display:flex;"><span>├── librdmacm
+</span></span><span style="display:flex;"><span>│ └── usr
+</span></span><span style="display:flex;"><span>│     ├── lib
+</span></span><span style="display:flex;"><span>│     ├── lib64
+</span></span><span style="display:flex;"><span>│     │ ├── librdmacm.so.1 -&gt; librdmacm.so.1.3.32.0
+</span></span><span style="display:flex;"><span>│     │ ├── librdmacm.so.1.3.32.0
+</span></span><span style="display:flex;"><span>│     │ └── rsocket
+</span></span><span style="display:flex;"><span>│     │     ├── librspreload.so
+</span></span><span style="display:flex;"><span>│     │     ├── librspreload.so.1 -&gt; librspreload.so
+</span></span><span style="display:flex;"><span>│     │     └── librspreload.so.1.0.0 -&gt; librspreload.so
+</span></span><span style="display:flex;"><span>│     └── share
+</span></span><span style="display:flex;"><span>│         ├── doc
+</span></span><span style="display:flex;"><span>│         │ └── rdma-core
+</span></span><span style="display:flex;"><span>│         │     └── librdmacm.md
+</span></span><span style="display:flex;"><span>│         └── man
+</span></span><span style="display:flex;"><span>│             └── man7
+</span></span><span style="display:flex;"><span>│                 └── rsocket.7.gz
+</span></span><span style="display:flex;"><span>├── rdma-core
+</span></span><span style="display:flex;"><span>│ ├── etc
+</span></span><span style="display:flex;"><span>│ │ ├── modprobe.d
+</span></span><span style="display:flex;"><span>│ │ │ ├── mlx4.conf
+</span></span><span style="display:flex;"><span>│ │ │ └── truescale.conf
+</span></span><span style="display:flex;"><span>│ │ ├── rdma
+</span></span><span style="display:flex;"><span>│ │ │ ├── mlx4.conf
+</span></span><span style="display:flex;"><span>│ │ │ └── modules
+</span></span><span style="display:flex;"><span>│ │ │     ├── infiniband.conf
+</span></span><span style="display:flex;"><span>│ │ │     ├── iwarp.conf
+</span></span><span style="display:flex;"><span>│ │ │     ├── opa.conf
+</span></span><span style="display:flex;"><span>│ │ │     ├── rdma.conf
+</span></span><span style="display:flex;"><span>│ │ │     └── roce.conf
+</span></span><span style="display:flex;"><span>│ │ └── udev
+</span></span><span style="display:flex;"><span>│ │     └── rules.d
+</span></span><span style="display:flex;"><span>│ │         └── 70-persistent-ipoib.rules
+</span></span><span style="display:flex;"><span>│ └── usr
+</span></span><span style="display:flex;"><span>│     ├── bin
+</span></span><span style="display:flex;"><span>│     │ └── ibdev2netdev
+</span></span><span style="display:flex;"><span>│     ├── lib
+</span></span><span style="display:flex;"><span>│     │ ├── dracut
+</span></span><span style="display:flex;"><span>│     │ │ └── modules.d
+</span></span><span style="display:flex;"><span>│     │ │     └── 05rdma
+</span></span><span style="display:flex;"><span>│     │ │         └── module-setup.sh
+</span></span><span style="display:flex;"><span>│     │ ├── modprobe.d
+</span></span><span style="display:flex;"><span>│     │ │ └── libmlx4.conf
+</span></span><span style="display:flex;"><span>│     │ ├── systemd
+</span></span><span style="display:flex;"><span>│     │ │ └── system
+</span></span><span style="display:flex;"><span>│     │ │     ├── rdma-hw.target
+</span></span><span style="display:flex;"><span>│     │ │     ├── rdma-load-modules@.service
+</span></span><span style="display:flex;"><span>│     │ │     └── rdma-ndd.service
+</span></span><span style="display:flex;"><span>│     │ └── udev
+</span></span><span style="display:flex;"><span>│     │     ├── rdma_rename
+</span></span><span style="display:flex;"><span>│     │     └── rules.d
+</span></span><span style="display:flex;"><span>│     │         ├── 60-rdma-ndd.rules
+</span></span><span style="display:flex;"><span>│     │         ├── 60-rdma-persistent-naming.rules
+</span></span><span style="display:flex;"><span>│     │         ├── 75-rdma-description.rules
+</span></span><span style="display:flex;"><span>│     │         ├── 90-rdma-hw-modules.rules
+</span></span><span style="display:flex;"><span>│     │         ├── 90-rdma-ulp-modules.rules
+</span></span><span style="display:flex;"><span>│     │         └── 90-rdma-umad.rules
+</span></span><span style="display:flex;"><span>│     ├── libexec
+</span></span><span style="display:flex;"><span>│     │ ├── mlx4-setup.sh
+</span></span><span style="display:flex;"><span>│     │ └── truescale-serdes.cmds
+</span></span><span style="display:flex;"><span>│     ├── sbin
+</span></span><span style="display:flex;"><span>│     │ └── rdma-ndd
+</span></span><span style="display:flex;"><span>│     └── share
+</span></span><span style="display:flex;"><span>│         ├── doc
+</span></span><span style="display:flex;"><span>│         │ └── rdma-core
+</span></span><span style="display:flex;"><span>│         │     ├── README.md
+</span></span><span style="display:flex;"><span>│         │     └── udev.md
+</span></span><span style="display:flex;"><span>│         ├── licenses
+</span></span><span style="display:flex;"><span>│         │ └── rdma-core
+</span></span><span style="display:flex;"><span>│         │     ├── COPYING.BSD_FB
+</span></span><span style="display:flex;"><span>│         │     ├── COPYING.BSD_MIT
+</span></span><span style="display:flex;"><span>│         │     ├── COPYING.GPL2
+</span></span><span style="display:flex;"><span>│         │     └── COPYING.md
+</span></span><span style="display:flex;"><span>│         └── man
+</span></span><span style="display:flex;"><span>│             ├── man7
+</span></span><span style="display:flex;"><span>│             │ └── rxe.7.gz
+</span></span><span style="display:flex;"><span>│             └── man8
+</span></span><span style="display:flex;"><span>│                 └── rdma-ndd.8.gz
+</span></span><span style="display:flex;"><span>├── rdma-core-devel
+</span></span><span style="display:flex;"><span>│ └── usr
+</span></span><span style="display:flex;"><span>│     ├── include
+</span></span><span style="display:flex;"><span>│     │ ├── infiniband
+</span></span><span style="display:flex;"><span>│     │ │ ├── acm.h
+</span></span><span style="display:flex;"><span>│     │ │ ├── acm_prov.h
+</span></span><span style="display:flex;"><span>│     │ │ ├── arch.h
+</span></span><span style="display:flex;"><span>│     │ │ ├── efadv.h
+</span></span><span style="display:flex;"><span>│     │ │ ├── ib.h
+</span></span><span style="display:flex;"><span>│     │ │ ├── ibnetdisc.h
+</span></span><span style="display:flex;"><span>│     │ │ ├── ibnetdisc_osd.h
+</span></span><span style="display:flex;"><span>│     │ │ ├── ib_user_ioctl_verbs.h
+</span></span><span style="display:flex;"><span>│     │ │ ├── mad.h
+</span></span><span style="display:flex;"><span>│     │ │ ├── mad_osd.h
+</span></span><span style="display:flex;"><span>│     │ │ ├── mlx4dv.h
+</span></span><span style="display:flex;"><span>│     │ │ ├── mlx5_api.h
+</span></span><span style="display:flex;"><span>│     │ │ ├── mlx5dv.h
+</span></span><span style="display:flex;"><span>│     │ │ ├── mlx5_user_ioctl_verbs.h
+</span></span><span style="display:flex;"><span>│     │ │ ├── opcode.h
+</span></span><span style="display:flex;"><span>│     │ │ ├── sa.h
+</span></span><span style="display:flex;"><span>│     │ │ ├── sa-kern-abi.h
+</span></span><span style="display:flex;"><span>│     │ │ ├── tm_types.h
+</span></span><span style="display:flex;"><span>│     │ │ ├── umad_cm.h
+</span></span><span style="display:flex;"><span>│     │ │ ├── umad.h
+</span></span><span style="display:flex;"><span>│     │ │ ├── umad_sa.h
+</span></span><span style="display:flex;"><span>│     │ │ ├── umad_sa_mcm.h
+</span></span><span style="display:flex;"><span>│     │ │ ├── umad_sm.h
+</span></span><span style="display:flex;"><span>│     │ │ ├── umad_str.h
+</span></span><span style="display:flex;"><span>│     │ │ ├── umad_types.h
+</span></span><span style="display:flex;"><span>│     │ │ ├── verbs_api.h
+</span></span><span style="display:flex;"><span>│     │ │ └── verbs.h
+</span></span><span style="display:flex;"><span>│     │ └── rdma
+</span></span><span style="display:flex;"><span>│     │     ├── rdma_cma_abi.h
+</span></span><span style="display:flex;"><span>│     │     ├── rdma_cma.h
+</span></span><span style="display:flex;"><span>│     │     ├── rdma_verbs.h
+</span></span><span style="display:flex;"><span>│     │     └── rsocket.h
+</span></span><span style="display:flex;"><span>│     ├── lib64
+</span></span><span style="display:flex;"><span>│     │ ├── libefa.so -&gt; libefa.so.1
+</span></span><span style="display:flex;"><span>│     │ ├── libibmad.so -&gt; libibmad.so.5
+</span></span><span style="display:flex;"><span>│     │ ├── libibnetdisc.so -&gt; libibnetdisc.so.5
+</span></span><span style="display:flex;"><span>│     │ ├── libibumad.so -&gt; libibumad.so.3
+</span></span><span style="display:flex;"><span>│     │ ├── libibverbs.so -&gt; libibverbs.so.1
+</span></span><span style="display:flex;"><span>│     │ ├── libmlx4.so -&gt; libmlx4.so.1
+</span></span><span style="display:flex;"><span>│     │ ├── libmlx5.so -&gt; libmlx5.so.1
+</span></span><span style="display:flex;"><span>│     │ ├── librdmacm.so -&gt; librdmacm.so.1
+</span></span><span style="display:flex;"><span>│     │ └── pkgconfig
+</span></span><span style="display:flex;"><span>│     │     ├── libefa.pc
+</span></span><span style="display:flex;"><span>│     │     ├── libibmad.pc
+</span></span><span style="display:flex;"><span>│     │     ├── libibnetdisc.pc
+</span></span><span style="display:flex;"><span>│     │     ├── libibumad.pc
+</span></span><span style="display:flex;"><span>│     │     ├── libibverbs.pc
+</span></span><span style="display:flex;"><span>│     │     ├── libmlx4.pc
+</span></span><span style="display:flex;"><span>│     │     ├── libmlx5.pc
+</span></span><span style="display:flex;"><span>│     │     └── librdmacm.pc
+</span></span><span style="display:flex;"><span>│     └── share
+</span></span><span style="display:flex;"><span>│         ├── doc
+</span></span><span style="display:flex;"><span>│         │ └── rdma-core
+</span></span><span style="display:flex;"><span>│         │     └── MAINTAINERS
+</span></span><span style="display:flex;"><span>│         └── man
+</span></span><span style="display:flex;"><span>│             ├── man3
+</span></span><span style="display:flex;"><span>│             │ ├── efadv_create_driver_qp.3.gz
+</span></span><span style="display:flex;"><span>│             │ ├── ...
+</span></span><span style="display:flex;"><span>│             │ └── umad_unregister.3.gz
+</span></span><span style="display:flex;"><span>│             └── man7
+</span></span><span style="display:flex;"><span>│                 ├── efadv.7.gz
+</span></span><span style="display:flex;"><span>│                 ├── mlx4dv.7.gz
+</span></span><span style="display:flex;"><span>│                 ├── mlx5dv.7.gz
+</span></span><span style="display:flex;"><span>│                 └── rdma_cm.7.gz
+</span></span></code></pre></div><h3 id="rdma-core-provider-ribrpm-制作以centos为例">rdma-core-provider-rib.rpm 制作(以Centos为例)</h3>
+<ol>
+<li>
+<p>rpm环境初始化</p>
+<ol>
+<li>安装rpm-build: <code>sudo yum install rpm-build</code></li>
+<li>创建rpm工作目录: <code>mkdir -p ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}</code></li>
+<li>初始化rpmbuild的环境配置：<code>echo '%_topdir %(echo $HOME)/rpmbuild' &gt; ~/.rpmmacros</code></li>
+</ol>
+</li>
+<li>
+<p>下载目标rdma-core公版源码到<code>rpmbuild/SOURCES</code>中，这个源码文件和<code>rdma-core.spec</code>中要求的一致</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>rdma-core-42.0.tgz
+</span></span></code></pre></div></li>
+<li>
+<p>拷贝provider driver patch包到<code>rpmbuild/SOURCES</code>中，patch的生成方式参考build的1.1和1.3</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>rdma-core-rib.patch
+</span></span></code></pre></div></li>
+<li>
+<p>下载目标<code>rdma-core/redhat/rdma-core.spec</code>到<code>rpmbuild/SPEC</code>中</p>
+<ul>
+<li>修改以下几行
+<ul>
+<li>声明patch包,需要在Source之后buildrequires之前<code>Patch0: rdma-core-rib.patch</code>需要和<code>SOURCES</code>中的patch报名一致</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-diff" data-lang="diff"><span style="display:flex;"><span><span style="color:#75715e">@@ -10,6 +10,9 @@ Summary: RDMA core userspace libraries and daemons
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span> License: GPLv2 or BSD
+</span></span><span style="display:flex;"><span> Url: https://github.com/linux-rdma/rdma-core
+</span></span><span style="display:flex;"><span> Source: rdma-core-%{version}.tar.gz
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">+
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">+Patch0: rdma-core-rib.patch
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">+
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e"></span> # Do not build static libs by default.
+</span></span><span style="display:flex;"><span> %define with_static %{?_with_static: 1} %{?!_with_static: 0}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">@@ -174,6 +177,8 @@ Provides: libocrdma = %{version}-%{release}
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span> Obsoletes: libocrdma &lt; %{version}-%{release}
+</span></span><span style="display:flex;"><span> Provides: librxe = %{version}-%{release}
+</span></span><span style="display:flex;"><span> Obsoletes: librxe &lt; %{version}-%{release}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">+Provides: librib = %{version}-%{release}
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">+Obsoletes: librib &lt; %{version}-%{release}
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e"></span>
+</span></span><span style="display:flex;"><span> %description -n libibverbs
+</span></span><span style="display:flex;"><span> libibverbs is a library that allows userspace processes to use RDMA
+</span></span><span style="display:flex;"><span><span style="color:#75715e">@@ -197,6 +202,7 @@ Device-specific plug-in ibverbs userspace drivers are included:
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span> - libmthca: Mellanox InfiniBand HCA
+</span></span><span style="display:flex;"><span> - libocrdma: Emulex OneConnect RDMA/RoCE Device
+</span></span><span style="display:flex;"><span> - libqedr: QLogic QL4xxx RoCE HCA
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">+- librib: A software implementation of the RoCE protocol
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e"></span> - librxe: A software implementation of the RoCE protocol
+</span></span><span style="display:flex;"><span> - libsiw: A software implementation of the iWarp protocol
+</span></span><span style="display:flex;"><span> - libvmw_pvrdma: VMware paravirtual RDMA device
+</span></span><span style="display:flex;"><span><span style="color:#75715e">@@ -282,6 +288,8 @@ easy, object-oriented access to IB verbs.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span> %prep
+</span></span><span style="display:flex;"><span> %setup
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">+%patch0 -p1
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">+
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e"></span> %build
+</span></span></code></pre></div></li>
+<li>
+<p>然后再<code>SPECS</code>下执行命令</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>rpmbuild -ba rdma-core.spec
+</span></span></code></pre></div></li>
+<li>
+<p>命令过程如果提示依赖包缺失，根据提示安装相应依赖包即可，然后等待执行完成</p>
+<ul>
+<li>
+<p>以下就是执行完命令的目录结构</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>./rpmbuild/
+</span></span><span style="display:flex;"><span>├── BUILD
+</span></span><span style="display:flex;"><span>│   └── rdma-core-48.0
+</span></span><span style="display:flex;"><span>│       ├── bin
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span>│       └── util
+</span></span><span style="display:flex;"><span>├── BUILDROOT
+</span></span><span style="display:flex;"><span>├── RPMS
+</span></span><span style="display:flex;"><span>│   └── x86_64
+</span></span><span style="display:flex;"><span>│       ├── ibacm-48.0-1.el8.x86_64.rpm
+</span></span><span style="display:flex;"><span>│       ├── ibacm-debuginfo-48.0-1.el8.x86_64.rpm
+</span></span><span style="display:flex;"><span>│       ├── infiniband-diags-48.0-1.el8.x86_64.rpm
+</span></span><span style="display:flex;"><span>│       ├── infiniband-diags-compat-48.0-1.el8.x86_64.rpm
+</span></span><span style="display:flex;"><span>│       ├── infiniband-diags-debuginfo-48.0-1.el8.x86_64.rpm
+</span></span><span style="display:flex;"><span>│       ├── iwpmd-48.0-1.el8.x86_64.rpm
+</span></span><span style="display:flex;"><span>│       ├── iwpmd-debuginfo-48.0-1.el8.x86_64.rpm
+</span></span><span style="display:flex;"><span>│       ├── libibumad-48.0-1.el8.x86_64.rpm
+</span></span><span style="display:flex;"><span>│       ├── libibumad-debuginfo-48.0-1.el8.x86_64.rpm
+</span></span><span style="display:flex;"><span>│       ├── libibverbs-48.0-1.el8.x86_64.rpm
+</span></span><span style="display:flex;"><span>│       ├── libibverbs-debuginfo-48.0-1.el8.x86_64.rpm
+</span></span><span style="display:flex;"><span>│       ├── libibverbs-utils-48.0-1.el8.x86_64.rpm
+</span></span><span style="display:flex;"><span>│       ├── libibverbs-utils-debuginfo-48.0-1.el8.x86_64.rpm
+</span></span><span style="display:flex;"><span>│       ├── librdmacm-48.0-1.el8.x86_64.rpm
+</span></span><span style="display:flex;"><span>│       ├── librdmacm-debuginfo-48.0-1.el8.x86_64.rpm
+</span></span><span style="display:flex;"><span>│       ├── librdmacm-utils-48.0-1.el8.x86_64.rpm
+</span></span><span style="display:flex;"><span>│       ├── librdmacm-utils-debuginfo-48.0-1.el8.x86_64.rpm
+</span></span><span style="display:flex;"><span>│       ├── python3-pyverbs-48.0-1.el8.x86_64.rpm
+</span></span><span style="display:flex;"><span>│       ├── python3-pyverbs-debuginfo-48.0-1.el8.x86_64.rpm
+</span></span><span style="display:flex;"><span>│       ├── rdma-core-48.0-1.el8.x86_64.rpm
+</span></span><span style="display:flex;"><span>│       ├── rdma-core-debuginfo-48.0-1.el8.x86_64.rpm
+</span></span><span style="display:flex;"><span>│       ├── rdma-core-debugsource-48.0-1.el8.x86_64.rpm
+</span></span><span style="display:flex;"><span>│       ├── rdma-core-devel-48.0-1.el8.x86_64.rpm
+</span></span><span style="display:flex;"><span>│       ├── srp_daemon-48.0-1.el8.x86_64.rpm
+</span></span><span style="display:flex;"><span>│       └── srp_daemon-debuginfo-48.0-1.el8.x86_64.rpm
+</span></span><span style="display:flex;"><span>├── SOURCES
+</span></span><span style="display:flex;"><span>│   ├── rdma-core-48.0.tar.gz
+</span></span><span style="display:flex;"><span>│   └── rdma-core-rib.patch
+</span></span><span style="display:flex;"><span>├── SPECS
+</span></span><span style="display:flex;"><span>│   └── rdma-core.spec
+</span></span><span style="display:flex;"><span>└── SRPMS
+</span></span><span style="display:flex;"><span>    └── rdma-core-48.0-1.el8.src.rpm
+</span></span></code></pre></div></li>
+<li>
+<p>BUILD是打包过程中文件</p>
+</li>
+<li>
+<p>RPMS/x86_64/下面就是rdma-core打包好的各个rpm包</p>
+</li>
+<li>
+<p>SRPMS中的rdma-core.src.rpm中包含的是制作rpm的原文件</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>├── rdma-core-48.0.tar.gz
+</span></span><span style="display:flex;"><span>├── rdma-core-rib.patch
+</span></span><span style="display:flex;"><span>└── rdma-core.spec
+</span></span></code></pre></div></li>
+</ul>
+</li>
+</ol>
+
+      </main>
+      <footer class="td-footer row d-print-none">
+  <div class="container-fluid">
+    <div class="row mx-md-2">
+      <div class="col-6 col-sm-4 text-xs-center order-sm-2">
+        
+      </div>
+      <div class="col-6 col-sm-4 text-end text-xs-center order-sm-3">
+        
+      </div>
+      <div class="td-footer__copyright-etc col-12 col-sm-4 text-center py-2 order-sm-2">
+        
+        
+        
+      </div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <script src="/js/main.min.6b611378dd7aa9db092fab7032555c3f7cf1f6f0216c4527424189c537230618.js" integrity="sha256-a2ETeN16qdsJL6twMlVcP3zx9vAhbEUnQkGJxTcjBhg=" crossorigin="anonymous"></script>
+<script defer src="/js/click-to-copy.min.f724d3de49218995223b7316aa2e53e2b34bf42026bf399ebb21bb02212402d1.js" integrity="sha256-9yTT3kkhiZUiO3MWqi5T4rNL9CAmvzmeuyG7AiEkAtE=" crossorigin="anonymous"></script>
+<script src='/js/tabpane-persist.js'></script>
+
+  </body>
+</html>
